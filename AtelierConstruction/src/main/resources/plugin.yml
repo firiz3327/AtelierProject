@@ -1,0 +1,16 @@
+name: AtelierConstruction
+version: 1.0
+auther: firiz
+main: net.firiz.atelierconstruction.AtelierConstructionV2
+api-version: 1.16
+depend: [ AtelierCommonAPI ]
+commands:
+    asm:
+        description: asm
+        usage: /asm
+    fb:
+        description: fb
+        usage: /fb
+    heads:
+        description: heads
+        usage: /heads
