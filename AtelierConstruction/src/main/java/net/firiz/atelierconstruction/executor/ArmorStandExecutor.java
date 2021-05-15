@@ -1,6 +1,6 @@
 package net.firiz.atelierconstruction.executor;
 
-import net.firiz.atelierconstruction.manager.ArmorStandManagerV2;
+import net.firiz.atelierconstruction.entity.ArmorStandManagerV2;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

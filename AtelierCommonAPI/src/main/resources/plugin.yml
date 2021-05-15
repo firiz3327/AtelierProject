@@ -4,6 +4,9 @@ auther: firiz
 main: net.firiz.ateliercommonapi.AtelierCommonAPI
 api-version: 1.16
 commands:
-  ticks:
-    description: ticks
-    usage: /ticks
+  ateliercommonapi:
+    description: ateliercommonapi
+    usage: /ateliercommonapi
+  loops:
+    description: loops
+    usage: /loops

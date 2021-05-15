@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.firiz.atelierconstruction.utils.LocationComponent;
-import net.firiz.atelierconstruction.version.AFBlock;
+import net.firiz.atelierconstruction.entity.version.AFBlock;
 import net.minecraft.server.v1_16_R3.Packet;
 import org.bukkit.Location;
 import org.bukkit.Material;

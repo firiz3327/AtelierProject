@@ -1,4 +1,4 @@
-package net.firiz.atelierconstruction.manager;
+package net.firiz.atelierconstruction.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -56,9 +56,12 @@ public enum ArmorStandManagerV2 {
         builder.append(Component.text("[Equip] ")
                 .clickEvent(ClickEvent.runCommand("/asm equips"))
                 .hoverEvent(HoverEvent.showText(Component.text("装備変更"))));
-        builder.append(Component.text("[ResetPos]")
+        builder.append(Component.text("[ResetPos] ")
                 .clickEvent(ClickEvent.runCommand("/asm resetpos"))
                 .hoverEvent(HoverEvent.showText(Component.text("体の方向をリセット"))));
+        builder.append(Component.text("[Remove]")
+                .clickEvent(ClickEvent.runCommand("/asm remove"))
+                .hoverEvent(HoverEvent.showText(Component.text("削除"))));
         builder.append(Component.newline());
     }
 
@@ -255,6 +258,10 @@ public enum ArmorStandManagerV2 {
                 stand.setLeftArmPose(EulerAngle.ZERO);
                 stand.setRightLegPose(EulerAngle.ZERO);
                 stand.setLeftLegPose(EulerAngle.ZERO);
+                break;
+            case "remove":
+                stand.remove();
+                selectStandMap.remove(sender);
                 break;
         }
         return true;

@@ -1,4 +1,4 @@
-package net.firiz.atelierconstruction.version;
+package net.firiz.atelierconstruction.entity.version;
 
 import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Location;

@@ -14,3 +14,7 @@ commands:
     heads:
         description: heads
         usage: /heads
+    customblocks:
+        description: customblocks
+        usage: /customblocks
+        aliases: [cb, cbs]

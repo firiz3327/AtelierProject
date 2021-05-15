@@ -1,27 +1,31 @@
 package net.firiz.atelierconstruction;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.firiz.atelierconstruction.manager.ArmorStandManagerV2;
-import net.firiz.atelierconstruction.version.AChair;
-import net.firiz.atelierconstruction.version.AFBlock;
+import net.firiz.atelierconstruction.entity.ArmorStandManagerV2;
+import net.firiz.atelierconstruction.entity.version.AChair;
+import net.firiz.atelierconstruction.entity.version.AFBlock;
+import net.firiz.atelierconstruction.entity.CustomBlockManager;
 import net.firiz.atelierconstruction.world.animation.AnimationManager;
+import net.firiz.atelierconstruction.world.regulation.RegulationManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameRule;
+import org.bukkit.Material;
+import org.bukkit.Rotation;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
@@ -29,6 +33,7 @@ import java.util.Map;
 public class AListener implements Listener {
 
     private final Map<Player, LivingEntity> selectedEntity = new Object2ObjectOpenHashMap<>();
+    private final RegulationManager regulation = RegulationManager.INSTANCE;
 
     @EventHandler
     private void changeWorld(final PlayerChangedWorldEvent e) {
@@ -49,8 +54,10 @@ public class AListener implements Listener {
         final Player player = e.getPlayer();
         final Block block = e.getClickedBlock();
         if (block != null && e.getHand() == EquipmentSlot.HAND && e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getItem() == null && player.getPassengers().isEmpty() && AChair.isChair(block)) {
-                new AChair(block.getLocation()).sitDown(player);
+            if (e.getItem() == null) {
+                if (player.getPassengers().isEmpty() && AChair.isChair(block)) {
+                    new AChair(block.getLocation()).sitDown(player);
+                }
             }
         }
     }
@@ -66,6 +73,19 @@ public class AListener implements Listener {
                         e.setCancelled(true);
                         ArmorStandManagerV2.INSTANCE.selectStand(player, (ArmorStand) entity);
                         ArmorStandManagerV2.INSTANCE.showSelector(player);
+                    } else if (entity instanceof ItemFrame) {
+                        e.setCancelled(true);
+                        final ItemFrame itemFrame = (ItemFrame) entity;
+                        itemFrame.setVisible(!itemFrame.isVisible());
+                    }
+                    break;
+                case STICK:
+                    if (entity instanceof ItemFrame) {
+                        final ItemFrame itemFrame = (ItemFrame) entity;
+                        if (itemFrame.isFixed()) {
+                            final Rotation rotation = itemFrame.getRotation();
+                            itemFrame.setRotation(rotation.rotateClockwise());
+                        }
                     }
                     break;
                 case DEBUG_STICK:
@@ -79,7 +99,7 @@ public class AListener implements Listener {
                         }
                     }
                     break;
-                default: // ignored
+                default:
                     break;
             }
         }
@@ -129,13 +149,36 @@ public class AListener implements Listener {
     private void place(BlockPlaceEvent e) {
         final ItemStack item = e.getItemInHand();
         if (item.hasItemMeta()) {
-            final ItemMeta meta = item.getItemMeta();
-            if (meta.hasDisplayName() && Component.text("fallingBlock").equals(meta.displayName())) {
+            if (e.getPlayer().isOp()) {
+                final ItemMeta meta = item.getItemMeta();
+                if (meta.hasDisplayName() && Component.text("fallingBlock").equals(meta.displayName())) {
+                    e.setCancelled(true);
+                    final Block block = e.getBlock();
+                    new AFBlock(block.getLocation(), block.getBlockData()).sendSpawnPacket(e.getPlayer());
+                    return;
+                }
+            }
+            if (item.getType() == Material.FLOWER_POT) {
                 e.setCancelled(true);
-                final Block block = e.getBlock();
-                new AFBlock(block.getLocation(), block.getBlockData()).sendSpawnPacket(e.getPlayer());
+                CustomBlockManager.INSTANCE.flowerPot(e.getPlayer(), e.getBlock().getLocation(), item);
+                return;
             }
         }
+        regulation.onPlaceBlock(e);
+    }
+
+    @EventHandler
+    private void hangingPlace(HangingPlaceEvent e) {
+        if (e.getPlayer() != null && e.getEntity() instanceof ItemFrame) {
+            final PlayerInventory inventory = e.getPlayer().getInventory();
+            final ItemStack mainHand = inventory.getItemInMainHand();
+            CustomBlockManager.INSTANCE.itemFrame((ItemFrame) e.getEntity(), mainHand);
+        }
+    }
+
+    @EventHandler
+    private void redStone(BlockRedstoneEvent e) {
+        regulation.onRedstone(e);
     }
 
 }

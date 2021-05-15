@@ -1,4 +1,4 @@
-package net.firiz.atelierconstruction.version;
+package net.firiz.atelierconstruction.entity.version;
 
 import net.firiz.ateliercommonapi.FakeId;
 import net.firiz.atelierconstruction.ReflectionUtils;
