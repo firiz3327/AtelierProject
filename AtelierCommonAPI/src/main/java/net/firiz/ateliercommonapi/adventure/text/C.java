@@ -3,57 +3,58 @@ package net.firiz.ateliercommonapi.adventure.text;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 
-public enum C {
-    BLACK(NamedTextColor.BLACK),
-    DARK_BLUE(NamedTextColor.DARK_BLUE),
-    DARK_GREEN(NamedTextColor.DARK_GREEN),
-    DARK_AQUA(NamedTextColor.DARK_AQUA),
-    DARK_RED(NamedTextColor.DARK_RED),
-    DARK_PURPLE(NamedTextColor.DARK_PURPLE),
-    GOLD(NamedTextColor.GOLD),
-    GRAY(NamedTextColor.GRAY),
-    DARK_GRAY(NamedTextColor.DARK_GRAY),
-    BLUE(NamedTextColor.BLUE),
-    GREEN(NamedTextColor.GREEN),
-    AQUA(NamedTextColor.AQUA),
-    RED(NamedTextColor.RED),
-    LIGHT_PURPLE(NamedTextColor.LIGHT_PURPLE),
-    YELLOW(NamedTextColor.YELLOW),
-    WHITE(NamedTextColor.WHITE),
-    MINECOIN_GOLD(14538245), // [&g] Bedrock Edition
+public final class C implements TextColor {
+    public static final C BLACK = new C(NamedTextColor.BLACK);
+    public static final C DARK_BLUE = new C(NamedTextColor.DARK_BLUE);
+    public static final C DARK_GREEN = new C(NamedTextColor.DARK_GREEN);
+    public static final C DARK_AQUA = new C(NamedTextColor.DARK_AQUA);
+    public static final C DARK_RED = new C(NamedTextColor.DARK_RED);
+    public static final C DARK_PURPLE = new C(NamedTextColor.DARK_PURPLE);
+    public static final C GOLD = new C(NamedTextColor.GOLD);
+    public static final C GRAY = new C(NamedTextColor.GRAY);
+    public static final C DARK_GRAY = new C(NamedTextColor.DARK_GRAY);
+    public static final C BLUE = new C(NamedTextColor.BLUE);
+    public static final C GREEN = new C(NamedTextColor.GREEN);
+    public static final C AQUA = new C(NamedTextColor.AQUA);
+    public static final C RED = new C(NamedTextColor.RED);
+    public static final C LIGHT_PURPLE = new C(NamedTextColor.LIGHT_PURPLE);
+    public static final C YELLOW = new C(NamedTextColor.YELLOW);
+    public static final C WHITE = new C(NamedTextColor.WHITE);
+    public static final C MINECOIN_GOLD = new C(14538245); // [&g] Bedrock Edition
     // https://flatuicolors.com/palette/defo
-    FLAT_LIGHT_GREEN1(1752220),
-    FLAT_LIGHT_GREEN2(1482885),
-    FLAT_YELLOW1(15844367),
-    FLAT_YELLOW2(15965202),
-    FLAT_GREEN1(3066993),
-    FLAT_GREEN2(2600544),
-    FLAT_ORANGE1(15105570),
-    FLAT_ORANGE2(13849600),
-    FLAT_BLUE1(3447003),
-    FLAT_BLUE2(2719929),
-    FLAT_RED1(15158332),
-    FLAT_RED2(12597547),
-    FLAT_PURPLE1(10181046),
-    FLAT_PURPLE2(9323693),
-    FLAT_SILVER1(15528177),
-    FLAT_SILVER2(12436423),
-    FLAT_NAVY_BLUE1(3426654),
-    FLAT_NAVY_BLUE2(2899536),
-    FLAT_GRAY1(9807270),
-    FLAT_GRAY2(8359053);
+    public static final C FLAT_LIGHT_GREEN1 = new C(1752220);
+    public static final C FLAT_LIGHT_GREEN2 = new C(1482885);
+    public static final C FLAT_YELLOW1 = new C(15844367);
+    public static final C FLAT_YELLOW2 = new C(15965202);
+    public static final C FLAT_GREEN1 = new C(3066993);
+    public static final C FLAT_GREEN2 = new C(2600544);
+    public static final C FLAT_ORANGE1 = new C(15105570);
+    public static final C FLAT_ORANGE2 = new C(13849600);
+    public static final C FLAT_BLUE1 = new C(3447003);
+    public static final C FLAT_BLUE2 = new C(2719929);
+    public static final C FLAT_RED1 = new C(15158332);
+    public static final C FLAT_RED2 = new C(12597547);
+    public static final C FLAT_PURPLE1 = new C(10181046);
+    public static final C FLAT_PURPLE2 = new C(9323693);
+    public static final C FLAT_SILVER1 = new C(15528177);
+    public static final C FLAT_SILVER2 = new C(12436423);
+    public static final C FLAT_NAVY_BLUE1 = new C(3426654);
+    public static final C FLAT_NAVY_BLUE2 = new C(2899536);
+    public static final C FLAT_GRAY1 = new C(9807270);
+    public static final C FLAT_GRAY2 = new C(8359053);
 
-    private final TextColor color;
+    private final int value;
 
     C(TextColor color) {
-        this.color = color;
+        this.value = color.value();
     }
 
-    C(int hex) {
-        this.color = TextColor.color(hex);
+    C(int value) {
+        this.value = value;
     }
 
-    public TextColor getColor() {
-        return color;
+    @Override
+    public int value() {
+        return value;
     }
 }
