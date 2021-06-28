@@ -1,6 +1,5 @@
 package net.firiz.ateliercommonapi;
 
-import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
@@ -77,18 +76,21 @@ public enum SkinProperty {
         target.getProperties().put(TEXTURES_KEY, new Property(TEXTURES_KEY, data, signature));
     }
 
+    @MinecraftVersion(value = "1.16.5", requiredPaper = true)
     public ItemStack getHeadItem() {
         final ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         final SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
         final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
         modifyTextures(gameProfile);
-        final CraftPlayerProfile profile = new CraftPlayerProfile(gameProfile);
-        profile.complete(true, false);
-        skullMeta.setPlayerProfile(profile);
+//        final CraftPlayerProfile profile = new CraftPlayerProfile(gameProfile);
+//        profile.complete(true, false);
+//        assert skullMeta != null;
+//        skullMeta.setPlayerProfile(profile);
         item.setItemMeta(skullMeta);
         return item;
     }
 
+    @MinecraftVersion(value = "1.16.5", requiredPaper = true)
     public static void openHeads(Player player) {
         final Inventory inv = Bukkit.createInventory(null, 54);
         Arrays.stream(values()).forEach(skinProperty -> inv.addItem(skinProperty.getHeadItem()));

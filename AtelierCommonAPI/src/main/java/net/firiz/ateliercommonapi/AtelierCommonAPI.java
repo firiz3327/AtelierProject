@@ -1,8 +1,11 @@
 package net.firiz.ateliercommonapi;
 
 import net.firiz.ateliercommonapi.loop.LoopManager;
+import net.firiz.ateliercommonapi.nms.packet.WrapPacket;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityHeadRotation;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class AtelierCommonAPI extends JavaPlugin {

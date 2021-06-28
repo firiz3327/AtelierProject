@@ -1,21 +1,17 @@
 package net.firiz.ateliercommonapi.adventure.text;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
-import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+//import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Text extends TextComponentWrapper {
@@ -137,39 +133,47 @@ public class Text extends TextComponentWrapper {
     }
 
     public boolean plainStartsWith(Component prefixComponent) {
-        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
-        return plainStartsWith(prefix);
+//        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
+//        return plainStartsWith(prefix);
+        return false;
     }
 
     public boolean plainStartsWith(String prefix) {
-        return PlainComponentSerializer.plain().serialize(this).startsWith(prefix);
+//        return PlainComponentSerializer.plain().serialize(this).startsWith(prefix);
+        return false;
     }
 
     public boolean plainEndsWith(Component suffixComponent) {
-        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
-        return plainStartsWith(suffix);
+//        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
+//        return plainStartsWith(suffix);
+        return false;
     }
 
     public boolean plainEndsWith(String suffix) {
-        return PlainComponentSerializer.plain().serialize(this).endsWith(suffix);
+//        return PlainComponentSerializer.plain().serialize(this).endsWith(suffix);
+        return false;
     }
 
     public static boolean plainStartsWith(Component component, Component prefixComponent) {
-        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
-        return plainStartsWith(component, prefix);
+//        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
+//        return plainStartsWith(component, prefix);
+        return false;
     }
 
     public static boolean plainStartsWith(Component component, String prefix) {
-        return PlainComponentSerializer.plain().serialize(component).startsWith(prefix);
+//        return PlainComponentSerializer.plain().serialize(component).startsWith(prefix);
+        return false;
     }
 
     public static boolean plainEndsWith(Component component, Component suffixComponent) {
-        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
-        return plainStartsWith(component, suffix);
+//        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
+//        return plainStartsWith(component, suffix);
+        return false;
     }
 
     public static boolean plainEndsWith(Component component, String suffix) {
-        return PlainComponentSerializer.plain().serialize(component).endsWith(suffix);
+//        return PlainComponentSerializer.plain().serialize(component).endsWith(suffix);
+        return false;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

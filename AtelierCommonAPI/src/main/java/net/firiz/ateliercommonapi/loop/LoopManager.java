@@ -5,6 +5,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.firiz.ateliercommonapi.AtelierCommonAPI;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author firiz
  */
@@ -46,6 +49,15 @@ public enum LoopManager {
         scheduler.cancelTask(taskId);
     }
 
+    public List<Collection<TickRunnable>> getRunnableList() {
+        final List<Collection<TickRunnable>> tickRunnableList = new ObjectArrayList<>();
+        tickRunnableList.add(ticks.values());
+        tickRunnableList.add(seconds.values());
+        tickRunnableList.add(halfSeconds.values());
+        tickRunnableList.add(minutes.values());
+        return tickRunnableList;
+    }
+
     // 厳密さは求めていないので大分適当。あっているかはわからない
     private void loop() {
         taskId = scheduler.scheduleSyncRepeatingTask(plugin, () -> {
@@ -75,22 +87,22 @@ public enum LoopManager {
         final Int2ObjectOpenHashMap<TickRunnable> map;
         final int id;
         switch (mode) {
-            case 0:
+            case 0 -> {
                 id = ticksId++;
                 map = ticks;
-                break;
-            case 1:
+            }
+            case 1 -> {
                 id = halfSecondsId++;
                 map = halfSeconds;
-                break;
-            case 2:
+            }
+            case 2 -> {
                 id = secondsId++;
                 map = seconds;
-                break;
-            default:
+            }
+            default -> {
                 id = minutesId++;
                 map = minutes;
-                break;
+            }
         }
         map.put(id, runnable);
         return id;
