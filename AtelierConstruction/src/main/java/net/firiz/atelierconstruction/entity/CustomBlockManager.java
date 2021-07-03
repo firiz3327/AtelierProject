@@ -1,6 +1,5 @@
 package net.firiz.atelierconstruction.entity;
 
-import net.firiz.atelierconstruction.AtelierConstructionV2;
 import net.firiz.atelierconstruction.entity.version.FixedItemFrame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

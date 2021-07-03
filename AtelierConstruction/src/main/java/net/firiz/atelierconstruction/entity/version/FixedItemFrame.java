@@ -1,13 +1,13 @@
 package net.firiz.atelierconstruction.entity.version;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.EntityItemFrame;
-import net.minecraft.server.v1_16_R3.EnumDirection;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.core.EnumDirection;
+import net.minecraft.world.entity.decoration.EntityItemFrame;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlock;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -32,7 +32,8 @@ public class FixedItemFrame {
                 new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
                 dir
         );
-        this.entity.fixed = true;
+        // EntityItemFrame.ar (1.17) = EntityItemFrame.fixed (1.16)
+        this.entity.ar = true;
     }
 
     public static ItemFrame spawn(Location location, BlockFace face) {
@@ -56,7 +57,7 @@ public class FixedItemFrame {
         if (consumer != null) {
             consumer.accept(bukkitEntity);
         }
-        entity.world.addEntity(entity, reason);
+        entity.getWorld().addEntity(entity, reason);
         return bukkitEntity;
     }
 

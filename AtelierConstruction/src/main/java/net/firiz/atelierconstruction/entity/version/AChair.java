@@ -1,12 +1,12 @@
 package net.firiz.atelierconstruction.entity.version;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.world.entity.projectile.EntityTippedArrow;
 import org.bukkit.Location;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Stairs;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class AChair extends EntityTippedArrow {
@@ -36,12 +36,13 @@ public class AChair extends EntityTippedArrow {
         if (getPassengers().isEmpty() || !isChair(blockPos.getBlock())) {
             die();
         } else {
-            despawnCounter = this.world.spigotConfig.arrowDespawnRate - 20;
+            // life(arrow)
+            au = getWorld().spigotConfig.arrowDespawnRate - 20;
         }
     }
 
     public void sitDown(Player player) {
-        world.addEntity(this);
+        getWorld().addEntity(this);
         ((CraftPlayer) player).getHandle().startRiding(this);
 //        final PlayerConnection playerConnection = ((CraftPlayer) player).getHandle().playerConnection;
 //        playerConnection.sendPacket(new PacketPlayOutSpawnEntity(this));

@@ -91,23 +91,10 @@ public enum RegulationManager {
     }
 
     private boolean isRedStone(Material type) {
-        switch (type) {
-            case STICKY_PISTON:
-            case PISTON:
-            case REDSTONE_TORCH:
-            case REDSTONE_WALL_TORCH:
-            case REDSTONE_LAMP:
-            case TRIPWIRE_HOOK:
-            case DAYLIGHT_DETECTOR:
-            case REDSTONE_BLOCK:
-            case OBSERVER:
-            case REPEATER:
-            case COMPOSTER:
-            case REDSTONE_WIRE:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case STICKY_PISTON, PISTON, REDSTONE_TORCH, REDSTONE_WALL_TORCH, REDSTONE_LAMP, TRIPWIRE_HOOK, DAYLIGHT_DETECTOR, REDSTONE_BLOCK, OBSERVER, REPEATER, COMPOSTER, REDSTONE_WIRE -> true;
+            default -> false;
+        };
     }
 
     private static class R {

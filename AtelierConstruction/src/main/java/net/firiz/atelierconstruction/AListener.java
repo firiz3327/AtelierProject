@@ -73,15 +73,13 @@ public class AListener implements Listener {
                         e.setCancelled(true);
                         ArmorStandManagerV2.INSTANCE.selectStand(player, (ArmorStand) entity);
                         ArmorStandManagerV2.INSTANCE.showSelector(player);
-                    } else if (entity instanceof ItemFrame) {
+                    } else if (entity instanceof final ItemFrame itemFrame) {
                         e.setCancelled(true);
-                        final ItemFrame itemFrame = (ItemFrame) entity;
                         itemFrame.setVisible(!itemFrame.isVisible());
                     }
                     break;
                 case STICK:
-                    if (entity instanceof ItemFrame) {
-                        final ItemFrame itemFrame = (ItemFrame) entity;
+                    if (entity instanceof final ItemFrame itemFrame) {
                         if (itemFrame.isFixed()) {
                             final Rotation rotation = itemFrame.getRotation();
                             itemFrame.setRotation(rotation.rotateClockwise());
@@ -107,34 +105,12 @@ public class AListener implements Listener {
 
     @EventHandler
     private void fadeBlock(final BlockFadeEvent e) {
-        switch (e.getBlock().getType()) {
-            case TUBE_CORAL:
-            case TUBE_CORAL_BLOCK:
-            case TUBE_CORAL_FAN:
-            case TUBE_CORAL_WALL_FAN:
-            case BRAIN_CORAL:
-            case BRAIN_CORAL_BLOCK:
-            case BRAIN_CORAL_FAN:
-            case BRAIN_CORAL_WALL_FAN:
-            case BUBBLE_CORAL:
-            case BUBBLE_CORAL_BLOCK:
-            case BUBBLE_CORAL_FAN:
-            case BUBBLE_CORAL_WALL_FAN:
-            case FIRE_CORAL:
-            case FIRE_CORAL_BLOCK:
-            case FIRE_CORAL_FAN:
-            case FIRE_CORAL_WALL_FAN:
-            case HORN_CORAL:
-            case HORN_CORAL_BLOCK:
-            case HORN_CORAL_FAN:
-            case HORN_CORAL_WALL_FAN:
-                final World world = e.getBlock().getWorld();
-                if (Integer.valueOf(0).equals(world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED))) {
-                    e.setCancelled(true);
-                }
-                break;
-            default: // ignored
-                break;
+        Material type = e.getBlock().getType();// ignored
+        if (type == Material.TUBE_CORAL || type == Material.TUBE_CORAL_BLOCK || type == Material.TUBE_CORAL_FAN || type == Material.TUBE_CORAL_WALL_FAN || type == Material.BRAIN_CORAL || type == Material.BRAIN_CORAL_BLOCK || type == Material.BRAIN_CORAL_FAN || type == Material.BRAIN_CORAL_WALL_FAN || type == Material.BUBBLE_CORAL || type == Material.BUBBLE_CORAL_BLOCK || type == Material.BUBBLE_CORAL_FAN || type == Material.BUBBLE_CORAL_WALL_FAN || type == Material.FIRE_CORAL || type == Material.FIRE_CORAL_BLOCK || type == Material.FIRE_CORAL_FAN || type == Material.FIRE_CORAL_WALL_FAN || type == Material.HORN_CORAL || type == Material.HORN_CORAL_BLOCK || type == Material.HORN_CORAL_FAN || type == Material.HORN_CORAL_WALL_FAN) {
+            final World world = e.getBlock().getWorld();
+            if (Integer.valueOf(0).equals(world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED))) {
+                e.setCancelled(true);
+            }
         }
     }
 

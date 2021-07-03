@@ -3,15 +3,15 @@ package net.firiz.atelierconstruction.world.animation;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.firiz.ateliercommonapi.nms.packet.PacketUtils;
 import net.firiz.atelierconstruction.utils.LocationComponent;
 import net.firiz.atelierconstruction.entity.version.AFBlock;
-import net.minecraft.server.v1_16_R3.Packet;
+import net.minecraft.network.protocol.Packet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -106,9 +106,7 @@ public class CenterAnimation implements Animation {
             packets.addAll(parts.createMovePacket(t(i * SPLIT_COUNT)));
         }
         center.getNearbyPlayers(100, 50, 100).forEach(player ->
-                packets.forEach(packet ->
-                        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet)
-                )
+                PacketUtils.sendPackets(player, packets)
         );
     }
 

@@ -18,6 +18,7 @@ import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 public enum ArmorStandManagerV2 {
@@ -80,28 +81,16 @@ public enum ArmorStandManagerV2 {
 
     private Component xyz(int type) {
         final TextComponent.Builder builder = Component.text();
+        boolean rotate = false;
         String typeName;
-        var rotate = false;
         switch (type) {
-            case 1:
-                typeName = "Head";
-                break;
-            case 2:
-                typeName = "Body";
-                break;
-            case 3:
-                typeName = "LeftArm";
-                break;
-            case 4:
-                typeName = "RightArm";
-                break;
-            case 5:
-                typeName = "LeftLeg";
-                break;
-            case 6:
-                typeName = "RightLeg";
-                break;
-            default: {
+            case 1 -> typeName = "Head";
+            case 2 -> typeName = "Body";
+            case 3 -> typeName = "LeftArm";
+            case 4 -> typeName = "RightArm";
+            case 5 -> typeName = "LeftLeg";
+            case 6 -> typeName = "RightLeg";
+            default -> {
                 typeName = "Locs";
                 rotate = true;
             }
@@ -136,161 +125,80 @@ public enum ArmorStandManagerV2 {
         }
         final Location loc = stand.getLocation();
         switch (args[0]) {
-            case "equips":
+            case "equips" -> {
                 final Inventory inv = Bukkit.createInventory(sender, 18, Component.text("装備変更"));
                 final ItemStack[] contents = inv.getContents();
                 for (int i = 0; i < contents.length; i++) {
-                    final ItemStack item;
-                    switch (i) {
-                        case 0:
-                            item = new ItemStack(Material.LEATHER_HELMET);
-                            break;
-                        case 1:
-                            item = new ItemStack(Material.LEATHER_CHESTPLATE);
-                            break;
-                        case 2:
-                            item = new ItemStack(Material.LEATHER_LEGGINGS);
-                            break;
-                        case 3:
-                            item = new ItemStack(Material.LEATHER_BOOTS);
-                            break;
-                        case 4:
-                            item = new ItemStack(Material.IRON_SWORD);
-                            break;
-                        case 5:
-                            item = new ItemStack(Material.SHIELD);
-                            break;
-                        case 9:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getHelmet();
-                            break;
-                        case 10:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getChestplate();
-                            break;
-                        case 11:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getLeggings();
-                            break;
-                        case 12:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getBoots();
-                            break;
-                        case 13:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getItemInMainHand();
-                            break;
-                        case 14:
-                            item = (stand.getEquipment() == null) ? null : stand.getEquipment().getItemInOffHand();
-                            break;
-                        default:
-                            item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-                            break;
-                    }
+                    final ItemStack item = switch (i) {
+                        case 0 -> new ItemStack(Material.LEATHER_HELMET);
+                        case 1 -> new ItemStack(Material.LEATHER_CHESTPLATE);
+                        case 2 -> new ItemStack(Material.LEATHER_LEGGINGS);
+                        case 3 -> new ItemStack(Material.LEATHER_BOOTS);
+                        case 4 -> new ItemStack(Material.IRON_SWORD);
+                        case 5 -> new ItemStack(Material.SHIELD);
+                        case 9 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getHelmet();
+                        case 10 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getChestplate();
+                        case 11 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getLeggings();
+                        case 12 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getBoots();
+                        case 13 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getItemInMainHand();
+                        case 14 -> (stand.getEquipment() == null) ? null : stand.getEquipment().getItemInOffHand();
+                        default -> new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+                    };
                     if (item != null) {
                         contents[i] = item;
                     }
                 }
                 inv.setContents(contents);
                 sender.openInventory(inv);
-                break;
-            case "toggles": {
-                boolean change;
-                switch (args[1]) {
-                    case "0": {
-                        stand.setVisible(!stand.isVisible());
-                        change = stand.isVisible();
-                        break;
-                    }
-                    case "1": {
-                        stand.setInvulnerable(!stand.isInvulnerable());
-                        change = stand.isInvulnerable();
-                        break;
-                    }
-                    case "2": {
-                        stand.setRemoveWhenFarAway(!stand.getRemoveWhenFarAway());
-                        change = stand.getRemoveWhenFarAway();
-                        break;
-                    }
-                    case "3": {
-                        stand.setBasePlate(!stand.hasBasePlate());
-                        change = stand.hasBasePlate();
-                        break;
-                    }
-                    case "4": {
-                        stand.setGravity(!stand.hasGravity());
-                        change = stand.hasGravity();
-                        break;
-                    }
-                    case "5": {
-                        stand.setArms(!stand.hasArms());
-                        change = stand.hasArms();
-                        break;
-                    }
-                    case "6": {
-                        stand.setSmall(!stand.isSmall());
-                        change = stand.isSmall();
-                        break;
-                    }
-                    case "7": {
-                        stand.setMarker(!stand.isMarker());
-                        change = stand.isMarker();
-                        break;
-                    }
-                    default:
-                        change = false;
-                        break;
-                }
-                sender.sendActionBar(Component.text("Toggle " + args[2] + " is " + change).color(NamedTextColor.GREEN));
-                break;
             }
-            case "r":
-                stand.teleport(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw() + Float.parseFloat(args[1]), loc.getPitch()));
-                break;
-            case "x":
-                changePos(stand, Double.parseDouble(args[1]), 0.0, 0.0, args[2]);
-                break;
-            case "y":
-                changePos(stand, 0.0, Double.parseDouble(args[1]), 0.0, args[2]);
-                break;
-            case "z":
-                changePos(stand, 0.0, 0.0, Double.parseDouble(args[1]), args[2]);
-                break;
-            case "resetpos":
+            case "toggles" -> {
+                final boolean change = switch (args[1]) {
+                    case "0" -> invokeAndGet(() -> stand.setVisible(!stand.isVisible()), stand::isVisible);
+                    case "1" -> invokeAndGet(() -> stand.setInvulnerable(!stand.isInvulnerable()), stand::isInvulnerable);
+                    case "2" -> invokeAndGet(() -> stand.setRemoveWhenFarAway(!stand.getRemoveWhenFarAway()), stand::getRemoveWhenFarAway);
+                    case "3" -> invokeAndGet(() -> stand.setBasePlate(!stand.hasBasePlate()), stand::hasBasePlate);
+                    case "4" -> invokeAndGet(() -> stand.setGravity(!stand.hasGravity()), stand::hasGravity);
+                    case "5" -> invokeAndGet(() -> stand.setArms(!stand.hasArms()), stand::hasArms);
+                    case "6" -> invokeAndGet(() -> stand.setSmall(!stand.isSmall()), stand::isSmall);
+                    case "7" -> invokeAndGet(() -> stand.setMarker(!stand.isMarker()), stand::isMarker);
+                    default -> false;
+                };
+                sender.sendActionBar(Component.text("Toggle " + args[2] + " is " + change).color(NamedTextColor.GREEN));
+            }
+            case "r" -> stand.teleport(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw() + Float.parseFloat(args[1]), loc.getPitch()));
+            case "x" -> changePos(stand, Double.parseDouble(args[1]), 0.0, 0.0, args[2]);
+            case "y" -> changePos(stand, 0.0, Double.parseDouble(args[1]), 0.0, args[2]);
+            case "z" -> changePos(stand, 0.0, 0.0, Double.parseDouble(args[1]), args[2]);
+            case "resetpos" -> {
                 stand.setHeadPose(EulerAngle.ZERO);
                 stand.setBodyPose(EulerAngle.ZERO);
                 stand.setRightArmPose(EulerAngle.ZERO);
                 stand.setLeftArmPose(EulerAngle.ZERO);
                 stand.setRightLegPose(EulerAngle.ZERO);
                 stand.setLeftLegPose(EulerAngle.ZERO);
-                break;
-            case "remove":
+            }
+            case "remove" -> {
                 stand.remove();
                 selectStandMap.remove(sender);
-                break;
+            }
+            default -> {
+                // ignored
+            }
         }
         return true;
     }
 
     private void changePos(ArmorStand stand, double x, double y, double z, String type) {
         switch (type) {
-            case "Head":
-                stand.setHeadPose(stand.getHeadPose().add(x, y, z));
-                break;
-            case "Body":
-                stand.setBodyPose(stand.getBodyPose().add(x, y, z));
-                break;
-            case "LeftArm":
-                stand.setLeftArmPose(stand.getLeftArmPose().add(x, y, z));
-                break;
-            case "RightArm":
-                stand.setRightArmPose(stand.getRightArmPose().add(x, y, z));
-                break;
-            case "LeftLeg":
-                stand.setLeftLegPose(stand.getLeftLegPose().add(x, y, z));
-                break;
-            case "RightLeg":
-                stand.setRightLegPose(stand.getRightLegPose().add(x, y, z));
-                break;
-            default: {
+            case "Head" -> stand.setHeadPose(stand.getHeadPose().add(x, y, z));
+            case "Body" -> stand.setBodyPose(stand.getBodyPose().add(x, y, z));
+            case "LeftArm" -> stand.setLeftArmPose(stand.getLeftArmPose().add(x, y, z));
+            case "RightArm" -> stand.setRightArmPose(stand.getRightArmPose().add(x, y, z));
+            case "LeftLeg" -> stand.setLeftLegPose(stand.getLeftLegPose().add(x, y, z));
+            case "RightLeg" -> stand.setRightLegPose(stand.getRightLegPose().add(x, y, z));
+            default -> {
                 final Location loc = stand.getLocation();
                 stand.teleport(new Location(loc.getWorld(), loc.getX() + x, loc.getY() + y, loc.getZ() + z, loc.getYaw(), loc.getPitch()));
-                break;
             }
         }
     }
@@ -309,6 +217,11 @@ public enum ArmorStandManagerV2 {
             equipment.setItemInMainHand(inv.getContents()[13]);
             equipment.setItemInOffHand(inv.getContents()[14]);
         }
+    }
+
+    private <T> T invokeAndGet(Runnable runnable, Supplier<T> supplier) {
+        runnable.run();
+        return supplier.get();
     }
 
 }

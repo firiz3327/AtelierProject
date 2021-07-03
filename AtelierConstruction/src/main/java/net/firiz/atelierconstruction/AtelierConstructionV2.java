@@ -2,7 +2,6 @@ package net.firiz.atelierconstruction;
 
 import net.firiz.atelierconstruction.executor.ArmorStandExecutor;
 import net.firiz.atelierconstruction.executor.FallingBlockExecutor;
-import net.firiz.atelierconstruction.executor.OpenHeadExecutor;
 import net.firiz.atelierconstruction.executor.OpenCustomBlockExecutor;
 import net.firiz.atelierconstruction.world.animation.AnimationManager;
 import net.firiz.atelierconstruction.world.regulation.RegulationManager;
@@ -16,7 +15,6 @@ public class AtelierConstructionV2 extends JavaPlugin {
     public void onEnable() {
         Objects.requireNonNull(getCommand("asm")).setExecutor(new ArmorStandExecutor());
         Objects.requireNonNull(getCommand("fb")).setExecutor(new FallingBlockExecutor());
-        Objects.requireNonNull(getCommand("heads")).setExecutor(new OpenHeadExecutor());
         Objects.requireNonNull(getCommand("customblocks")).setExecutor(new OpenCustomBlockExecutor());
         getServer().getPluginManager().registerEvents(new AListener(), this);
         AnimationManager.INSTANCE.init();

@@ -1,13 +1,18 @@
 package net.firiz.atelierconstruction.entity.version;
 
 import net.firiz.ateliercommonapi.FakeId;
+import net.firiz.ateliercommonapi.nms.packet.EntityPacket;
+import net.firiz.ateliercommonapi.nms.packet.PacketUtils;
 import net.firiz.atelierconstruction.ReflectionUtils;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
+import net.minecraft.world.entity.item.EntityFallingBlock;
+import net.minecraft.world.level.block.Block;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.block.data.CraftBlockData;
 import org.bukkit.entity.Player;
 
 public class AFBlock extends EntityFallingBlock {
@@ -28,12 +33,8 @@ public class AFBlock extends EntityFallingBlock {
         this.fakeId = FakeId.createId();
         this.location = location;
         setNoGravity(true);
-        p1 = ReflectionUtils.set(
-                new PacketPlayOutSpawnEntity(this, Block.getCombinedId(getBlock())),
-                PacketPlayOutSpawnEntity.class,
-                "a",
-                fakeId
-        ).get();
+        e(fakeId);
+        p1 = new PacketPlayOutSpawnEntity(this, Block.getCombinedId(getBlock()));
         p2 = new PacketPlayOutEntityMetadata(fakeId, getDataWatcher(), true);
     }
 
@@ -42,37 +43,36 @@ public class AFBlock extends EntityFallingBlock {
     }
 
     public Packet<?> createMovePacket(Location location) {
-        return ReflectionUtils.set(
-                new PacketPlayOutEntityTeleport(),
-                PacketPlayOutEntityTeleport.class,
-                "a",
-                fakeId
-        ).set("b", location.getX())
-                .set("c", location.getY())
-                .set("d", location.getZ())
-                .set("e", (byte) ((int) (yaw * 256.0F / 360.0F)))
-                .set("f", (byte) ((int) (pitch * 256.0F / 360.0F)))
-                .set("g", isOnGround())
-                .get();
+        return EntityPacket.teleportPacket(fakeId, location, isOnGround());
+//        return ReflectionUtils.set(
+//                new PacketPlayOutEntityTeleport(),
+//                PacketPlayOutEntityTeleport.class,
+//                "a",
+//                fakeId
+//        ).set("b", location.getX())
+//                .set("c", location.getY())
+//                .set("d", location.getZ())
+//                .set("e", (byte) ((int) (yaw * 256.0F / 360.0F)))
+//                .set("f", (byte) ((int) (pitch * 256.0F / 360.0F)))
+//                .set("g", isOnGround())
+//                .get();
     }
 
     @Override
     public void tick() {
-        ticksLived = 580;
+        this.R = 580;
     }
 
     public void spawn() {
-        world.addEntity(this);
+        getWorld().addEntity(this);
     }
 
     public void sendSpawnPacket(Player player) {
-        final PlayerConnection playerConnection = ((CraftPlayer) player).getHandle().playerConnection;
-        playerConnection.sendPacket(p1);
-        playerConnection.sendPacket(p2);
+        PacketUtils.sendPackets(player, p1, p2);
     }
 
     public void fakeSpawn() {
-        world.getWorld().getPlayers().forEach(this::sendSpawnPacket);
+        getWorld().getWorld().getPlayers().forEach(this::sendSpawnPacket);
     }
 
 }

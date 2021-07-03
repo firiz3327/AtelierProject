@@ -11,9 +11,6 @@ commands:
     fb:
         description: fb
         usage: /fb
-    heads:
-        description: heads
-        usage: /heads
     customblocks:
         description: customblocks
         usage: /customblocks
