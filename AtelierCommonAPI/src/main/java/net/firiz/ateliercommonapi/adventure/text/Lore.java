@@ -15,7 +15,7 @@ public final class Lore extends ObjectArrayList<Component> {
 
     private static final String NULL_COMPONENT_ERR = "component is null.";
     private final boolean autoRemoveItalic;
-    private transient TextComponentWrapper component;
+    private transient ComponentWrapper<?> component;
 
     public Lore() {
         this(true);
@@ -149,28 +149,21 @@ public final class Lore extends ObjectArrayList<Component> {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean add(final Component component) {
-        if (component instanceof TextComponent) {
-            this.component = new TextComponentWrapper((TextComponent) component);
-            if (autoRemoveItalic) {
-                this.component.decoration(TextDecoration.ITALIC, false);
-            }
-            return super.add(this.component);
+        this.component = ComponentWrapper.wrap(component);
+        if (autoRemoveItalic) {
+            this.component.decoration(TextDecoration.ITALIC, false);
         }
-        throw new IllegalArgumentException("component isn't TextComponent class. " + component.getClass());
+        return super.add(this.component);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void add(final int i, final Component component) {
-        if (component instanceof TextComponent) {
-            this.component = new TextComponentWrapper((TextComponent) component);
-            if (autoRemoveItalic) {
-                this.component.decoration(TextDecoration.ITALIC, false);
-            }
-            super.add(i, this.component);
-            return;
+        this.component = ComponentWrapper.wrap(component);
+        if (autoRemoveItalic) {
+            this.component.decoration(TextDecoration.ITALIC, false);
         }
-        throw new IllegalArgumentException("component isn't TextComponent class. " + component.getClass());
+        super.add(i, this.component);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -217,13 +210,10 @@ public final class Lore extends ObjectArrayList<Component> {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public Lore append(final Component component) {
         Objects.requireNonNull(this.component, NULL_COMPONENT_ERR);
-        if (component instanceof TextComponent) {
-            final TextComponentWrapper c = new TextComponentWrapper((TextComponent) component);
-            this.component.append(c);
-            this.component = c;
-            return this;
-        }
-        throw new IllegalArgumentException("Only TextComponent is supported.");
+        final ComponentWrapper<?> c = ComponentWrapper.wrap(component);
+        this.component.append(c);
+        this.component = c;
+        return this;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

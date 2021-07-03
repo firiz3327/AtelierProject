@@ -17,10 +17,14 @@ import java.util.Objects;
 
 public class Text extends TextComponentWrapper {
 
-    private TextComponentWrapper lastComponent;
+    private ComponentWrapper<?> lastComponent;
 
     public Text() {
         this(true);
+    }
+
+    public Text(Component component) {
+        this(component, true);
     }
 
     public Text(TextComponent component) {
@@ -62,6 +66,14 @@ public class Text extends TextComponentWrapper {
     public Text(final boolean autoRemoveItalic) {
         super(Component.text(""));
         initialize(autoRemoveItalic);
+    }
+
+    public Text(@Nullable final Component component, final boolean autoRemoveItalic) {
+        super(Component.empty());
+        initialize(autoRemoveItalic);
+        if (component != null) {
+            append(component);
+        }
     }
 
     public Text(@Nullable final TextComponent component, final boolean autoRemoveItalic) {
@@ -254,13 +266,10 @@ public class Text extends TextComponentWrapper {
 
     @Override
     public @NonNull @NotNull Text append(@NonNull Component component) {
-        if (component instanceof TextComponent) {
-            final TextComponentWrapper c = new TextComponentWrapper((TextComponent) component);
-            super.append(c);
-            this.lastComponent = c;
-            return this;
-        }
-        throw new IllegalArgumentException("Only TextComponent is supported.");
+        final ComponentWrapper<?> c = ComponentWrapper.wrap(component);
+        super.append(c);
+        this.lastComponent = c;
+        return this;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
