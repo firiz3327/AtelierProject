@@ -67,13 +67,20 @@ public class WrapPacket<T extends Packet<PacketListenerPlayOut>> extends PacketD
 
     // https://wiki.vg/Protocol#Data_types
     // https://wiki.vg/Protocol#VarInt_and_VarLong
-    public void writeVarInt(int value) {
-        do {
-            byte currentByte = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) currentByte |= 0b10000000;
-            writeByte(currentByte);
-        } while (value != 0);
+    // PacketDataSerializer.j() readVarInt
+    // PacketDataSerializer.d(int value) writeVarInt
+    @MinecraftVersion("1.17")
+    public WrapPacket<T> writeVarInt(int value) {
+        d(value);
+        return this;
+    }
+
+    // PacketDataSerializer.k() readVarLong
+    // PacketDataSerializer.b(long value) writeVarLong
+    @MinecraftVersion("1.17")
+    public WrapPacket<T> writeVarLong(long value) {
+        b(value);
+        return this;
     }
 
     public @NotNull WrapPacket<T> writeItem(ItemStack item) {
