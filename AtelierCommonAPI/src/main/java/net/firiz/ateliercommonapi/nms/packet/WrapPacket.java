@@ -2,6 +2,7 @@ package net.firiz.ateliercommonapi.nms.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.UnpooledByteBufAllocator;
+import net.firiz.ateliercommonapi.MinecraftVersion;
 import net.kyori.adventure.text.Component;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
@@ -64,24 +65,15 @@ public class WrapPacket<T extends Packet<PacketListenerPlayOut>> extends PacketD
         return array;
     }
 
-    @Override
-    public int j() {
-        int i = 0;
-        int j = 0;
-
-        byte b0;
+    // https://wiki.vg/Protocol#Data_types
+    // https://wiki.vg/Protocol#VarInt_and_VarLong
+    public void writeVarInt(int value) {
         do {
-            b0 = this.readByte();
-            if (b0 < 0) { // minus byte support
-                return b0;
-            }
-            i |= (b0 & 127) << j++ * 7;
-            if (j > 5) {
-                throw new RuntimeException("VarInt too big");
-            }
-        } while ((b0 & 128) == 128);
-
-        return i;
+            byte currentByte = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0) currentByte |= 0b10000000;
+            writeByte(currentByte);
+        } while (value != 0);
     }
 
     public @NotNull WrapPacket<T> writeItem(ItemStack item) {

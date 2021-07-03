@@ -59,9 +59,10 @@ public class EntityData {
         armorStand.setCustomName(new AdventureComponent(name));
         armorStand.setCustomNameVisible(true);
         armorStand.setInvisible(true);
-        armorStand.setInvulnerable(true);
+//        armorStand.setInvulnerable(true);
         armorStand.setSmall(small);
         armorStand.setMarker(true); // 当たり判定がなくなる
+//        armorStand.e(data.id);
         data.dataWatcher(armorStand.getDataWatcher());
         return data;
     }

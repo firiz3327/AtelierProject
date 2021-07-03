@@ -7,7 +7,8 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-//import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -116,12 +117,16 @@ public class Text extends TextComponentWrapper {
         }
     }
 
-    public static Text of(String name) {
-        return new Text(name);
+    public static Text empty() {
+        return new Text();
     }
 
-    public static Text of(String name, TextColor color) {
-        return of(name).color(color);
+    public static Text of(String text) {
+        return new Text(text);
+    }
+
+    public static Text of(String text, TextColor color) {
+        return of(text).color(color);
     }
 
     public static Text itemName(String name) {
@@ -132,48 +137,52 @@ public class Text extends TextComponentWrapper {
         return itemName(name).color(color);
     }
 
+    public static Text translateColor(String text) {
+        return new Text(LegacyComponentSerializer.legacyAmpersand().deserialize(text));
+    }
+
+    public Component get(int index) {
+        return children().get(index);
+    }
+
+    public String plain() {
+        return plain(this);
+    }
+
+    public static String plain(Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component);
+    }
+
     public boolean plainStartsWith(Component prefixComponent) {
-//        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
-//        return plainStartsWith(prefix);
-        return false;
+        return plainStartsWith(plain(prefixComponent));
     }
 
     public boolean plainStartsWith(String prefix) {
-//        return PlainComponentSerializer.plain().serialize(this).startsWith(prefix);
-        return false;
+        return plain().startsWith(prefix);
     }
 
     public boolean plainEndsWith(Component suffixComponent) {
-//        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
-//        return plainStartsWith(suffix);
-        return false;
+        return plainStartsWith(plain(suffixComponent));
     }
 
     public boolean plainEndsWith(String suffix) {
-//        return PlainComponentSerializer.plain().serialize(this).endsWith(suffix);
-        return false;
+        return plain().endsWith(suffix);
     }
 
     public static boolean plainStartsWith(Component component, Component prefixComponent) {
-//        final String prefix = PlainComponentSerializer.plain().serialize(prefixComponent);
-//        return plainStartsWith(component, prefix);
-        return false;
+        return plainStartsWith(component, plain(prefixComponent));
     }
 
     public static boolean plainStartsWith(Component component, String prefix) {
-//        return PlainComponentSerializer.plain().serialize(component).startsWith(prefix);
-        return false;
+        return plain(component).startsWith(prefix);
     }
 
     public static boolean plainEndsWith(Component component, Component suffixComponent) {
-//        final String suffix = PlainComponentSerializer.plain().serialize(suffixComponent);
-//        return plainStartsWith(component, suffix);
-        return false;
+        return plainStartsWith(component, plain(suffixComponent));
     }
 
     public static boolean plainEndsWith(Component component, String suffix) {
-//        return PlainComponentSerializer.plain().serialize(component).endsWith(suffix);
-        return false;
+        return plain(component).endsWith(suffix);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -189,7 +198,7 @@ public class Text extends TextComponentWrapper {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
-    public @NonNull Text hoverEvent(@org.checkerframework.checker.nullness.qual.Nullable HoverEventSource<?> event) {
+    public @NonNull @NotNull Text hoverEvent(@org.checkerframework.checker.nullness.qual.Nullable HoverEventSource<?> event) {
         if (lastComponent == this) {
             super.hoverEvent(event);
         } else {
@@ -244,7 +253,7 @@ public class Text extends TextComponentWrapper {
     }
 
     @Override
-    public @NonNull Text append(@NonNull Component component) {
+    public @NonNull @NotNull Text append(@NonNull Component component) {
         if (component instanceof TextComponent) {
             final TextComponentWrapper c = new TextComponentWrapper((TextComponent) component);
             super.append(c);

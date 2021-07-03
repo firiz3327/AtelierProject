@@ -10,3 +10,6 @@ commands:
   loops:
     description: loops
     usage: /loops
+  heads:
+    description: heads
+    usage: /heads

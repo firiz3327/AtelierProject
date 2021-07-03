@@ -16,6 +16,7 @@ public class AtelierCommonAPI extends JavaPlugin {
         final ACAExec exec = new ACAExec();
         Objects.requireNonNull(getCommand("ateliercommonapi")).setExecutor(exec);
         Objects.requireNonNull(getCommand("loops")).setExecutor(exec);
+        Objects.requireNonNull(getCommand("heads")).setExecutor(exec);
     }
 
     @Override

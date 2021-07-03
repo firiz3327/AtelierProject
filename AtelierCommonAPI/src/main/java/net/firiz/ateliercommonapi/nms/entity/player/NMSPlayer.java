@@ -38,7 +38,11 @@ public class NMSPlayer extends NMSLivingEntity {
     }
 
     public Component displayName() {
-        return this.nms().adventure$displayName;
+        return this.entity().displayName();
+    }
+
+    public void displayName(Component component) {
+        this.entity().displayName(component);
     }
 
     public GameProfile profile() {
@@ -47,25 +51,23 @@ public class NMSPlayer extends NMSLivingEntity {
 
     public static NMSPlayer create(final World world, final Location location, final UUID uuid, final String name) {
         final GameProfile profile = new GameProfile(uuid, name);
-        return create(world, location, profile, name, uuid);
+        return create(world, location, profile, uuid);
     }
 
     public static NMSPlayer create(final World world, final Location location, final SkinProperty skinProperty, final String name) {
         final UUID uuid = UUID.randomUUID();
         final GameProfile profile = new GameProfile(uuid, name);
         skinProperty.modifyTextures(profile);
-        return create(world, location, profile, name, uuid);
+        return create(world, location, profile, uuid);
     }
 
-    private static NMSPlayer create(final World world, final Location location, final GameProfile profile, final String name, final UUID uuid) {
+    private static NMSPlayer create(final World world, final Location location, final GameProfile profile, final UUID uuid) {
         final MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         final WorldServer nmsWorld = ((CraftWorld) world).getHandle();
         final EntityPlayer entityPlayer = new EntityPlayer(server, nmsWorld, profile);
         entityPlayer.listName = CraftChatMessage.fromStringOrNull("npc");
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        final NMSPlayer result = new NMSPlayer(entityPlayer);
-        result.insertEntityFakeId();
-        return result;
+        return new NMSPlayer(entityPlayer);
     }
 
 }

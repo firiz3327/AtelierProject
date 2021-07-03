@@ -53,6 +53,11 @@ class ACAExec implements CommandExecutor {
                     }
                 }
                 return true;
+            case "heads":
+                if (commandSender instanceof Player) {
+                    SkinProperty.openHeads((Player) commandSender);
+                }
+                return true;
             default:
                 return false;
         }

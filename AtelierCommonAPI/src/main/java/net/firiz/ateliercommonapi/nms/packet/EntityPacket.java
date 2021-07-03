@@ -80,7 +80,7 @@ public final class EntityPacket {
     @MinecraftVersion("1.17")
     public static PacketPlayOutEntityHeadRotation headRotationPacket(int entityId, double yaw) {
         var wrapPacket = new WrapPacket<>(PacketPlayOutEntityHeadRotation.class);
-        wrapPacket.writeByte(entityId);
+        wrapPacket.writeVarInt(entityId);
         wrapPacket.writeByte((byte) (yaw * 256.0F / 360.0F));
         return wrapPacket.getPacket();
     }
@@ -152,7 +152,7 @@ public final class EntityPacket {
     @MinecraftVersion("1.17")
     public static PacketPlayOutEntityTeleport teleportPacket(int entityId, Location location, boolean onGround) {
         var wrapPacket = new WrapPacket<>(PacketPlayOutEntityTeleport.class);
-        wrapPacket.writeByte(entityId);
+        wrapPacket.writeVarInt(entityId);
         wrapPacket.writeDouble(location.getX());
         wrapPacket.writeDouble(location.getY());
         wrapPacket.writeDouble(location.getZ());

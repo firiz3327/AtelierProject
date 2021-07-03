@@ -1,5 +1,6 @@
 package net.firiz.ateliercommonapi.nms.entity;
 
+import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
@@ -26,7 +27,7 @@ public class NMSLivingEntity extends NMSEntity {
         return entity().getEyeLocation();
     }
 
-    public static NMSLivingEntity createLiving(Location location, String name, EntityType type) {
+    public static NMSLivingEntity createLiving(Location location, Component name, EntityType type) {
         if(!type.isAlive()) {
             throw new IllegalArgumentException("Its entityType is not LivingEntity.");
         }
@@ -34,7 +35,7 @@ public class NMSLivingEntity extends NMSEntity {
         final EntityLiving entity = (EntityLiving) craftWorld.createEntity(location, type.getEntityClass());
         entity.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         entity.setCustomNameVisible(true);
-        entity.getBukkitEntity().setCustomName(name);
+        entity.getBukkitEntity().customName(name);
         final NMSLivingEntity result = new NMSLivingEntity(entity);
         result.insertEntityFakeId();
         return result;
