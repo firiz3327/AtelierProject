@@ -67,7 +67,9 @@ public class NMSPlayer extends NMSLivingEntity {
         final EntityPlayer entityPlayer = new EntityPlayer(server, nmsWorld, profile);
         entityPlayer.listName = CraftChatMessage.fromStringOrNull("npc");
         entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        return new NMSPlayer(entityPlayer);
+        final NMSPlayer result = new NMSPlayer(entityPlayer);
+        result.insertEntityFakeId();
+        return result;
     }
 
 }
